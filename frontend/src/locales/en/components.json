@@ -1,0 +1,37 @@
+{
+	"searchbox": {
+		"placeholder": "search"
+	},
+	"navbar": {
+		"feed": "feed",
+		"orders": "orders",
+		"menu": {
+			"liked": "liked establishments",
+			"reviews": "orders",
+			"settings": "settings",
+			"logout": "logout",
+			"danger": "danger zone",
+			"delete": "delete account"
+		}
+	},
+	"authentication": {
+		"login": "login",
+		"signUp": "sign up",
+		"register": "register",
+		"forgotPassword": "forgot password?",
+		"resetPassword": "reset password",
+		"email": "email",
+		"password": "password",
+		"confirmPassword": "confirm password",
+		"next": "next step",
+		"noAccount": "don't have an account? sign up",
+		"existingAccount": "already have an account? log in",
+		"verify": "verify",
+		"createAccount": "create account",
+		"verifyAccount": "email verification",
+		"verificationCode": "verification code",
+		"enterVerificationCode": "enter verification code",
+		"resendVerification": "resend verification email",
+		"submit": "submit"
+	}
+}

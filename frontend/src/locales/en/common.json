@@ -1,0 +1,12 @@
+{
+	"app": {
+		"name": "blissbite"
+	},
+	"account": {
+		"account": "account",
+		"email": "email",
+		"forename": "forename",
+		"surname": "surname",
+		"password": "password"
+	}
+}

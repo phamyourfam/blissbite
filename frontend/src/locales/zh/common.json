@@ -1,0 +1,12 @@
+{
+	"app": {
+		"name": "咬悦"
+	},
+	"account": {
+		"account": "账户",
+		"email": "电子邮件",
+		"forename": "名",
+		"surname": "姓",
+		"password": "密码"
+	}
+}

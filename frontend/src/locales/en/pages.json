@@ -1,0 +1,18 @@
+{
+	"landing": {
+		"hero": {
+			"launch": "LAUNCH YOUR RESTAURANT TODAY",
+			"title": "order smarter, serve faster! {{brand}} ATE that",
+			"description": "transforming dine-in experiences with real-time order tracking and a seamless front-to-kitchen integrated point-of-sale system",
+			"explore": "explore food & drink",
+			"learn": "learn more",
+			"order_ready": "<strong>Sakura</strong>, \n your order is ready",
+			"order_placed": "<strong>Chae-won</strong> \n has ordered a matcha latte",
+			"features": {
+				"fast": "lightning fast",
+				"ready": "production ready",
+				"modern": "modern design"
+			}
+		}
+	}
+}

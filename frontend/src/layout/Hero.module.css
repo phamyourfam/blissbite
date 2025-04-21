@@ -1,0 +1,20 @@
+.gradientText {
+	line-height: 1;
+	background: linear-gradient(
+		80deg,
+		var(--mantine-primary-color-filled),
+		var(--mantine-primary-color-8)
+	);
+
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.themeIconBackground {
+	background: rgba(var(--mantine-primary-color-filled), 0.07);
+}
+
+.break-text::after {
+	content: '\A'; /* Inserts a line break */
+	white-space: pre; /* Ensures the line break is respected */
+}

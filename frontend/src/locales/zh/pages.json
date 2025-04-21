@@ -1,0 +1,18 @@
+{
+	"landing": {
+		"hero": {
+			"launch": "立即启动您的餐厅",
+			"title": "更智能点餐, 更快速服务! {{brand}} 绝对拿捏",
+			"description": "通过实时订单跟踪和无缝连接前台与厨房的POS系统, 彻底改变堂食体验。",
+			"explore": "探索美食与饮品",
+			"learn": "瞭解更多",
+			"features": {
+				"fast": "闪电般快速",
+				"ready": "生产级别可用",
+				"modern": "现代化设计"
+			},
+			"order_ready": "<strong>咲良</strong>, \n 您的订单已准备好",
+			"order_placed": "<strong>采源</strong> \n 刚刚点了一杯抹茶拿铁"
+		}
+	}
+}

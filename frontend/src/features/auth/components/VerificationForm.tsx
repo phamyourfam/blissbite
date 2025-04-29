@@ -62,7 +62,7 @@ export const VerificationForm = ({
                     onClick={onResendCode}
                     disabled={!email || !tempAccountId}
                 >
-                    {tComponents('resendVerificationEmail')}
+                    {tComponents('resend')}
                 </Button>
             </Group>
             <Button 

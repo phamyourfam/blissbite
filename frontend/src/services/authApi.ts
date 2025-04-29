@@ -21,6 +21,18 @@ interface AuthResponse {
 	sessionToken: string;
 }
 
+interface TransformedAccount {
+	id: string;
+	email: string;
+	forename?: string;
+	surname?: string;
+	accountType: 'PERSONAL' | 'PROFESSIONAL';
+	status: {
+		isVerified: boolean;
+		isActive: boolean;
+	};
+}
+
 interface LoginRequest {
 	email: string;
 	password: string;
@@ -75,12 +87,48 @@ export const authApi = baseApi.injectEndpoints({
 			async onQueryStarted(_arg: LoginRequest, { dispatch, queryFulfilled }) {
 				try {
 					const { data } = await queryFulfilled;
+					console.log('Login response:', data);
+					
+					// First set the session token
 					dispatch(
 						setCredentials({
-							account: data.account,
+							account: {
+								id: data.account.id,
+								email: data.account.email,
+								accountType: 'PERSONAL', // Default to PERSONAL until we fetch full details
+								status: {
+									isVerified: true,
+									isActive: true
+								}
+							},
 							sessionToken: data.sessionToken
 						})
 					);
+
+					// Then fetch complete account info
+					const [getCurrentUser] = authApi.endpoints.getCurrentUser.useLazyQuery();
+					const accountResponse = await getCurrentUser();
+					
+					if (accountResponse.data) {
+						const fullAccount = accountResponse.data.account;
+						console.log('Full account info:', fullAccount);
+						dispatch(
+							setCredentials({
+								account: {
+									id: fullAccount.id,
+									email: fullAccount.email,
+									forename: fullAccount.forename,
+									surname: fullAccount.surname,
+									accountType: fullAccount.accountType,
+									status: {
+										isVerified: fullAccount.status.isVerified,
+										isActive: fullAccount.status.isActive
+									}
+								},
+								sessionToken: data.sessionToken
+							})
+						);
+					}
 				} catch (error) {
 					console.error('Login failed:', error);
 				}
@@ -138,33 +186,83 @@ export const authApi = baseApi.injectEndpoints({
 			async onQueryStarted(_arg: CompleteSignupRequest, { dispatch, queryFulfilled }) {
 				try {
 					const { data } = await queryFulfilled;
+					console.log('Complete signup response:', data);
+					
+					if (!data || !data.account) {
+						throw new Error('Invalid response from server');
+					}
+
+					// Transform the account data to match our expected format
+					const transformedAccount: TransformedAccount = {
+						id: data.account.id,
+						email: data.account.email,
+						forename: data.account.forename,
+						surname: data.account.surname,
+						accountType: data.account.accountType,
+						status: {
+							isVerified: true, // Since they just completed signup
+							isActive: true   // New accounts are active by default
+						}
+					};
+
 					dispatch(
 						setCredentials({
-							account: data.account,
+							account: transformedAccount,
 							sessionToken: data.sessionToken
 						})
 					);
 				} catch (error) {
 					console.error('Complete signup failed:', error);
+					// You might want to dispatch an error action here
 				}
 			}
 		}),
 
 		// Get current user endpoint
-		getCurrentUser: builder.query<{ account: AuthResponse['account'] }, void>({
+		getCurrentUser: builder.query<{ account: TransformedAccount }, void>({
 			query: () => '/authentication/me',
 			providesTags: ['Account' as TagDescription<'Account'>],
-			transformResponse: (response: { account: any }) => ({
-				account: {
-					id: response.account.id,
-					email: response.account.email,
-					forename: response.account.forename,
-					surname: response.account.surname,
-					accountType: response.account.accountType,
-					status: response.account.status,
-					verifications: response.account.verifications
+			transformResponse: (response: any) => {
+				console.log('Raw getCurrentUser response:', response);
+				if (!response || !response.account) {
+					console.error('Invalid response from getCurrentUser:', response);
+					return {
+						account: {
+							id: '',
+							email: '',
+							accountType: 'PERSONAL',
+							status: {
+								isVerified: false,
+								isActive: false
+							}
+						}
+					};
 				}
-			})
+
+				const account = response.account;
+				console.log('Account data from getCurrentUser:', {
+					id: account.id,
+					email: account.email,
+					forename: account.forename,
+					surname: account.surname,
+					accountType: account.accountType,
+					status: account.status
+				});
+
+				return {
+					account: {
+						id: account.id,
+						email: account.email,
+						forename: account.forename || undefined,
+						surname: account.surname || undefined,
+						accountType: account.accountType || 'PERSONAL',
+						status: {
+							isVerified: account.status?.status === 'ACTIVE' || false,
+							isActive: account.status?.status === 'ACTIVE' || false
+						}
+					}
+				};
+			}
 		}),
 
 		// Logout endpoint

@@ -13,6 +13,10 @@
 			},
 			"order_ready": "<strong>咲良</strong>, \n 您的订单已准备好",
 			"order_placed": "<strong>采源</strong> \n 刚刚点了一杯抹茶拿铁"
+		}, 
+		"features": {
+			"title": "为什么选择我们?",
+			"description": "发现我们独特的优势, 成为您理想的合作伙伴"
 		}
 	}
 }

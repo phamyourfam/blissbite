@@ -10,7 +10,6 @@ declare global {
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { RootState } from '../app/store';
 import { handleGlobalError } from '../utils';
-import { selectSessionToken } from '../features/auth/authSlice';
 
 // Create a base API service that we'll inject endpoints into later
 const baseApi = createApi({
@@ -19,15 +18,9 @@ const baseApi = createApi({
     // Use fetchBaseQuery as the underlying query function
     const baseQuery = fetchBaseQuery({
       baseUrl: `${process.env.REACT_APP_API_BASE_URL}/${process.env.REACT_APP_API_VERSION}`,
-      prepareHeaders: (headers, { getState }) => {
-        // Get the token from the auth slice
-        const token = selectSessionToken(getState() as RootState);
-        
-        // If we have a token, add it to the headers
-        if (token) {
-          headers.set('authorization', `Bearer ${token}`);
-        }
-        
+      credentials: 'include', // This ensures cookies are sent with requests
+      prepareHeaders: (headers) => {
+        // No need to set any headers as we're using session cookies
         return headers;
       },
     });

@@ -11,6 +11,11 @@ import { LandingPage } from './pages';
 import { Navbar } from './layout';
 import { ThemeProvider } from './theme';
 import { NotificationTest } from './components/NotificationTest';
+import { Settings } from './pages/Settings';
+import { Establishments } from './pages/Establishments';
+import { EstablishmentDetail } from './pages/EstablishmentDetail';
+import EstablishmentProfile from './pages/EstablishmentProfile';
+import { Feed } from './layout/panels/Feed';
 
 const App = () => {
 	const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
@@ -26,7 +31,7 @@ const App = () => {
 							path='/'
 							component={() => (
 								<>
-									<NotificationTest />
+									{/* <NotificationTest /> */}
 									<LandingPage />
 								</>
 							)}
@@ -35,16 +40,19 @@ const App = () => {
 						<AppShell
 							header={{ height: 60 }}
 							navbar={{
-								width: 300,
-								breakpoint: 'sm'
-								// collapsed: { mobile: !isOpen }
-							}}
-							padding='md'
+								width: 240,
+								breakpoint: 'sm',
+								collapsed: { mobile: true }
+							}}		
 						>
 							<Navbar />
 							<AppShell.Main>
-								<Route path='/feed'>Feed</Route>
+								<Route path='/feed' component={Feed} />
 								<Route path='/orders'>Orders</Route>
+								<Route path='/settings' component={Settings} />
+								<Route path='/establishments' component={Establishments} />
+								<Route path='/establishments/:id/settings' component={EstablishmentDetail} />
+								<Route path='/establishments/:id' component={EstablishmentProfile} />
 							</AppShell.Main>
 						</AppShell>
 					</Switch>

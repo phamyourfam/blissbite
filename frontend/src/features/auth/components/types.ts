@@ -7,6 +7,7 @@ export interface SignupFormValues {
     tempAccountId?: string;
     accountId?: string;
     verificationCode?: string;
+    accountType?: 'PERSONAL' | 'PROFESSIONAL';
 }
 
 export interface VerifyCodeRequest {

@@ -11,8 +11,13 @@
 			"settings": "settings",
 			"logout": "logout",
 			"danger": "danger zone",
-			"delete": "delete account"
-		}
+			"deleteAccount": "delete account",
+			"deleteAccountWarning": "This action is irreversible. All your data will be permanently deleted. Please confirm to proceed.",
+			"confirmEmail": "confirm email",
+			"cancel": "cancel"
+		},
+		"settings": "settings",
+		"establishments": "establishments"
 	},
 	"authentication": {
 		"login": "login",
@@ -32,6 +37,9 @@
 		"verificationCode": "verification code",
 		"enterVerificationCode": "enter verification code",
 		"resendVerification": "resend verification email",
-		"submit": "submit"
+		"submit": "submit",
+		"resend": "resend verification code",
+		"verifyEmail": "verify email",
+		"back": "back to sign up"
 	}
 }

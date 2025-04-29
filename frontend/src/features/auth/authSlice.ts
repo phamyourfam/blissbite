@@ -5,16 +5,13 @@ import type { RootState } from '../../app/store';
 interface Account {
 	id: string;
 	email: string;
-	forename: string;
-	surname: string;
+	forename?: string;
+	surname?: string;
 	accountType: 'PERSONAL' | 'PROFESSIONAL';
 	status: {
-		status: 'ACTIVE' | 'SUSPENDED' | 'SOFT_DELETED';
+		isVerified: boolean;
+		isActive: boolean;
 	};
-	verifications: {
-		method: string;
-		verified_at: Date;
-	}[];
 }
 
 // Define the signup form values interface
@@ -32,15 +29,20 @@ interface SignupFormValues {
 // Define a type for the slice state
 interface AuthState {
 	account: Account | null;
-	sessionToken: string | null;
 	isAuthenticated: boolean;
 	isLoading: boolean;
-
+	error: string | null;
 	// Signup flow state
-	signupStep: number;
+	authMode: 'login' | 'signup' | 'verify';
+	sessionToken: string | null;
 	isTemporaryAccount: boolean;
-	signupFormData: SignupFormValues | null;
-	authMode: 'login' | 'signup';
+	signupFormData: {
+		email: string;
+		password: string;
+		forename?: string;
+		surname?: string;
+		accountType?: 'PERSONAL' | 'PROFESSIONAL';
+	} | null;
 }
 
 // Helper function to load persisted state
@@ -48,7 +50,9 @@ const loadPersistedState = (): Partial<AuthState> => {
 	try {
 		const persistedState = localStorage.getItem('authState');
 		if (persistedState) {
-			return JSON.parse(persistedState);
+			const state = JSON.parse(persistedState);
+			console.log('Loaded persisted auth state:', state);
+			return state;
 		}
 	} catch (error) {
 		console.error('Error loading persisted auth state:', error);
@@ -59,83 +63,81 @@ const loadPersistedState = (): Partial<AuthState> => {
 // Define the initial state using that type
 const initialState: AuthState = {
 	account: null,
-	sessionToken: null,
 	isAuthenticated: false,
 	isLoading: true,
-
+	error: null,
 	// Signup flow initial state
-	signupStep: 0,
+	authMode: 'login',
+	sessionToken: null,
 	isTemporaryAccount: false,
 	signupFormData: null,
-	authMode: 'login',
 	...loadPersistedState()
 };
 
-export const authSlice = createSlice({
+console.log('Initial auth state:', initialState);
+
+const authSlice = createSlice({
 	name: 'auth',
 	initialState,
 	reducers: {
-		// Action to set account and session token upon successful login/signup
-		setCredentials: (
-			state,
-			action: PayloadAction<{ account: Account; sessionToken: string }>
-		) => {
+		setCredentials: (state, action: PayloadAction<{ account: Account; sessionToken: string }>) => {
+			console.log('Setting credentials:', action.payload);
 			state.account = action.payload.account;
 			state.sessionToken = action.payload.sessionToken;
 			state.isAuthenticated = true;
 			state.isLoading = false;
-			// Store auth state in localStorage for persistence
+			state.error = null;
 			localStorage.setItem('authState', JSON.stringify({
 				account: action.payload.account,
 				sessionToken: action.payload.sessionToken,
-				isAuthenticated: true,
-				isLoading: false
+				isAuthenticated: true
 			}));
 		},
-		// Action to clear account and session on logout
 		logout: (state) => {
 			state.account = null;
 			state.sessionToken = null;
 			state.isAuthenticated = false;
 			state.isLoading = false;
-			// Remove auth state from storage
+			state.error = null;
 			localStorage.removeItem('authState');
 		},
-		// Action to set loading state
 		setLoading: (state, action: PayloadAction<boolean>) => {
 			state.isLoading = action.payload;
 		},
-		// Actions for signup flow
-		setSignupStep: (state, action: PayloadAction<number>) => {
-			state.signupStep = action.payload;
+		setError: (state, action: PayloadAction<string | null>) => {
+			state.error = action.payload;
+		},
+		updateAccountType: (state, action: PayloadAction<'PERSONAL' | 'PROFESSIONAL'>) => {
+			if (state.account) {
+				state.account.accountType = action.payload;
+				state.error = null;
+			}
+		},
+		// Signup flow reducers
+		setAuthMode: (state, action: PayloadAction<'login' | 'signup' | 'verify'>) => {
+			state.authMode = action.payload;
+		},
+		setSessionToken: (state, action: PayloadAction<string | null>) => {
+			state.sessionToken = action.payload;
 		},
 		setIsTemporaryAccount: (state, action: PayloadAction<boolean>) => {
 			state.isTemporaryAccount = action.payload;
 		},
-		setSignupFormData: (state, action: PayloadAction<SignupFormValues | null>) => {
+		setSignupFormData: (state, action: PayloadAction<AuthState['signupFormData']>) => {
 			state.signupFormData = action.payload;
 		},
-		setAuthMode: (state, action: PayloadAction<'login' | 'signup'>) => {
-			state.authMode = action.payload;
-		},
-		// Clear signup state
-		clearSignupState: (state) => {
-			state.signupStep = 0;
-			state.isTemporaryAccount = false;
-			state.signupFormData = null;
-		},
-		// Action to store entire signup session state
-		saveSignupSession: (
-			state,
-			action: PayloadAction<{
-				step: number;
-				isTemporary: boolean;
-				formData: SignupFormValues;
-			}>
-		) => {
-			state.signupStep = action.payload.step;
+		saveSignupSession: (state, action: PayloadAction<{
+			isTemporary: boolean;
+			formData: AuthState['signupFormData'];
+		}>) => {
 			state.isTemporaryAccount = action.payload.isTemporary;
 			state.signupFormData = action.payload.formData;
+		},
+		clearSignupState: (state) => {
+			state.authMode = 'login';
+			state.sessionToken = null;
+			state.isTemporaryAccount = false;
+			state.signupFormData = null;
 		}
 	}
 });
@@ -145,23 +147,25 @@ export const {
 	setCredentials,
 	logout,
 	setLoading,
-	setSignupStep,
+	setError,
+	updateAccountType,
+	setAuthMode,
+	setSessionToken,
 	setIsTemporaryAccount,
 	setSignupFormData,
-	setAuthMode,
-	clearSignupState,
-	saveSignupSession
+	saveSignupSession,
+	clearSignupState
 } = authSlice.actions;
 
 // Selectors
 export const selectCurrentUser = (state: RootState) => state.auth.account;
 export const selectIsAuthenticated = (state: RootState) => state.auth.isAuthenticated;
-export const selectIsLoading = (state: RootState) => state.auth.isLoading;
-export const selectSignupStep = (state: RootState) => state.auth.signupStep;
-export const selectIsTemporaryAccount = (state: RootState) => state.auth.isTemporaryAccount;
-export const selectSignupFormData = (state: RootState) => state.auth.signupFormData;
+export const selectAuthLoading = (state: RootState) => state.auth.isLoading;
+export const selectAuthError = (state: RootState) => state.auth.error;
 export const selectAuthMode = (state: RootState) => state.auth.authMode;
 export const selectSessionToken = (state: RootState) => state.auth.sessionToken;
+export const selectIsTemporaryAccount = (state: RootState) => state.auth.isTemporaryAccount;
+export const selectSignupFormData = (state: RootState) => state.auth.signupFormData;
 
 // Export the reducer as default
 export default authSlice.reducer;

@@ -62,6 +62,13 @@ export const EntryAuthModal = () => {
 	const [deleteAccountMutation] = useDeleteAccountMutation();
 	const [resendVerificationCodeMutation] = useResendVerificationCodeMutation();
 
+	useEffect(() => {
+		console.log('Auth mode changed:', authMode);
+		console.log('Is temporary account:', isTemporaryAccount);
+		console.log('Active step:', activeStep);
+		console.log('Redux form data:', reduxFormData);
+	}, [authMode, isTemporaryAccount, activeStep, reduxFormData]);
+
 	// Load session state from storage on initial render
 	useEffect(() => {
 		const savedSession = sessionStorage.getItem('authSession');
@@ -169,6 +176,7 @@ export const EntryAuthModal = () => {
 		try {
 			setIsSubmitting(true);
 			if (activeStep === 0) {
+				console.log('Starting signup process with values:', values);
 				const signupData = {
 					email: values.email,
 					password: values.password,
@@ -177,8 +185,10 @@ export const EntryAuthModal = () => {
 				};
 
 				const response = await signupStartMutation(signupData).unwrap();
+				console.log('Signup response:', response);
 
 				if (response.tempAccountId && response.accountId) {
+					console.log('Signup successful, updating state...');
 					const updatedValues = {
 						...values,
 						tempAccountId: response.tempAccountId,
@@ -190,6 +200,9 @@ export const EntryAuthModal = () => {
 					dispatch(setIsTemporaryAccount(true));
 					dispatch(setSignupFormData(updatedValues));
 					saveSessionState(1, true, updatedValues, dispatch);
+					console.log('State updated, should be on step 1 now');
+				} else {
+					console.error('Missing required fields in response:', response);
 				}
 			} else if (values.tempAccountId && values.accountId && values.verificationCode) {
 				// First step: Verify the code to get a token

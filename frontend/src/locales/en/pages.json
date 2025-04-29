@@ -13,6 +13,10 @@
 				"ready": "production ready",
 				"modern": "modern design"
 			}
+		},
+		"features": {
+			"title": "why?",
+			"description": "discover the unique advantages that set us apart and make us your ideal partner for success"
 		}
 	}
 }

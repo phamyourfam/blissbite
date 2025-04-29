@@ -12,7 +12,9 @@
 			"logout": "登出",
 			"danger": "危險區域",
 			"delete": "刪除帳號"
-		}
+		},
+		"settings": "設置",
+		"establishments": "商家"
 	},
 	"authentication": {
 		"login": "登錄",

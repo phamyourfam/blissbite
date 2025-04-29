@@ -8,5 +8,14 @@
 		"forename": "forename",
 		"surname": "surname",
 		"password": "password"
+	},
+	"product": {
+		"createTitle": "create product",
+		"name": "name",
+		"description": "description",
+		"price": "price",
+		"imageUrl": "image link",
+		"preparationTime": "preparation time",
+		"available": "available?"
 	}
 }

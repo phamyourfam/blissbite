@@ -1,0 +1,11 @@
+{
+  "email": null,
+  "password_hash": null,
+  "forename": null,
+  "surname": null,
+  "phone_number": null,
+  "created_at": null,
+  "updated_at": null,
+  "accountType": null,
+  "status": null
+}

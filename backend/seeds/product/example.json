@@ -1,0 +1,11 @@
+{
+  "name": null,
+  "description": "This is an example description text.",
+  "base_price": 0,
+  "is_available": null,
+  "preparation_time": 0,
+  "image_urls": null,
+  "created_at": null,
+  "updated_at": null,
+  "establishment": null
+}

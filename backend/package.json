@@ -1,0 +1,59 @@
+{
+	"name": "blissbite-backend",
+	"version": "0.1.0",
+	"description": "",
+	"scripts": {
+		"check": "npm run format && npm run lint",
+		"dev": "nodemon --exec npx ts-node src/index.ts",
+		"format": "prettier --write \"**/*.+(js|yml|yaml|json)\"",
+		"lint": "eslint .",
+		"start": "npx swc src/index.ts | node",
+		"test": "NODE_ENV=test jest'",
+		"seed": "npx ts-node seed.ts",
+		"build": "npx tsc"
+	},
+	"devDependencies": {
+		"@koa/cors": "2.2.3",
+		"@swc/core": "^1.11.10",
+		"@types/koa": "^2.15.0",
+		"@types/koa-compress": "^4.0.6",
+		"@types/koa-helmet": "^6.0.8",
+		"@types/koa-logger": "^3.1.5",
+		"@types/koa__cors": "^5.0.0",
+		"@types/koa__router": "^12.0.4",
+		"@types/node": "^22.13.10",
+		"@types/nodemailer": "^6.4.17",
+		"nodemon": "1.19.0",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.8.2"
+	},
+	"dependencies": {
+		"@koa/bodyparser": "^5.1.1",
+		"@koa/router": "^13.1.0",
+		"@ptkdev/logger": "^1.8.0",
+		"better-sqlite3": "^11.9.0",
+		"dotenv": "^16.4.7",
+		"helmet": "^8.0.0",
+		"joi": "^17.13.3",
+		"keyv": "^5.3.2",
+		"koa": "2.7.0",
+		"koa-compress": "3.0.0",
+		"koa-helmet": "^8.0.1",
+		"koa-logger": "3.2.0",
+		"koa-orm": "^3.2.1",
+		"koa-session": "^7.0.2",
+		"nodemailer": "^6.10.0",
+		"pkg-dir": "^8.0.0",
+		"route-list": "^1.3.5",
+		"typeorm": "^0.3.21",
+		"uuid": "^11.1.0"
+	},
+	"packageManager": "pnpm@10.9.0+sha512.0486e394640d3c1fb3c9d43d49cf92879ff74f8516959c235308f5a8f62e2e19528a65cdc2a3058f587cde71eba3d5b56327c8c33a97e4c4051ca48a10ca2d5f",
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"@swc/core",
+			"better-sqlite3",
+			"nodemon"
+		]
+	}
+}

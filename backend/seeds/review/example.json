@@ -1,0 +1,11 @@
+{
+  "reviewable_id": null,
+  "rating": 0,
+  "title": null,
+  "comment": "This is an example comment text.",
+  "is_anonymous": null,
+  "created_at": null,
+  "updated_at": null,
+  "account": null,
+  "reviewableType": null
+}

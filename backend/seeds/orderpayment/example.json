@@ -1,0 +1,8 @@
+{
+  "amount": 0,
+  "payment_method_id": null,
+  "payment_status_id": null,
+  "transaction_id": null,
+  "created_at": null,
+  "order": null
+}

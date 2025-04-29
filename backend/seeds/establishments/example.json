@@ -1,0 +1,8 @@
+{
+  "name": "Example Restaurant",
+  "address": "123 Main Street, City, Country",
+  "description": "A cozy restaurant serving delicious meals in a welcoming atmosphere.",
+  "status": "active",
+  "avatar": "https://example.com/images/restaurant-avatar.jpg",
+  "banner": "https://example.com/images/restaurant-banner.jpg"
+} 

@@ -1,0 +1,18 @@
+{
+  "order_number": null,
+  "status": null,
+  "type": null,
+  "subtotal": 0,
+  "tax": 0,
+  "total_price": 0,
+  "customer_name": null,
+  "customer_phone": null,
+  "customer_email": null,
+  "table_number": null,
+  "special_instructions": "This is an example special_instructions text.",
+  "created_at": null,
+  "updated_at": null,
+  "estimated_ready_time": null,
+  "account": null,
+  "establishment": null
+}
